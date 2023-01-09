@@ -46,14 +46,22 @@ function setup() {
         // TODO:  we can support install latest version by default if version
         // is not input.
         const version = core.getInput('version');
-        console.log('try to setup for version: ', version);
+        console.log('try to setup sccache version: ', version);
         const downloadUrl = `https://github.com/mozilla/sccache/releases/download/${version}/${getFilename(version)}`;
-        console.log('try to setup from url: ', downloadUrl);
+        console.log('sccache download from url: ', downloadUrl);
         // Download and extract.
         const sccachePackage = yield (0, tool_cache_1.downloadTool)(downloadUrl);
-        const sccachePath = yield (0, tool_cache_1.extractTar)(sccachePackage);
+        var sccachePath;
+        if (getExtension() == 'zip') {
+            sccachePath = yield (0, tool_cache_1.extractTar)(sccachePackage);
+        }
+        else {
+            sccachePath = yield (0, tool_cache_1.extractTar)(sccachePackage);
+        }
+        console.log('sccache extracted to: ', sccachePath);
         // Cache sccache.
         const sccacheHome = yield (0, tool_cache_1.cacheDir)(sccachePath, 'sccache', version);
+        console.log('sccache cached to: ', sccacheHome);
         // Add cached sccache into path.
         core.addPath(`${sccacheHome}`);
         // Expose the sccache path as env.

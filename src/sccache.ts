@@ -1,5 +1,10 @@
 import * as core from '@actions/core';
-import {downloadTool, extractTar, cacheDir} from '@actions/tool-cache';
+import {
+  downloadTool,
+  extractTar,
+  extractZip,
+  cacheDir
+} from '@actions/tool-cache';
 import {exec} from 'child_process';
 import * as fs from 'fs';
 import {promisify} from 'util';
@@ -8,19 +13,28 @@ async function setup() {
   // TODO:  we can support install latest version by default if version
   // is not input.
   const version = core.getInput('version');
-  console.log('try to setup for version: ', version);
+  console.log('try to setup sccache version: ', version);
 
   const downloadUrl = `https://github.com/mozilla/sccache/releases/download/${version}/${getFilename(
     version
   )}`;
-  console.log('try to setup from url: ', downloadUrl);
+  console.log('sccache download from url: ', downloadUrl);
 
   // Download and extract.
   const sccachePackage = await downloadTool(downloadUrl);
-  const sccachePath = await extractTar(sccachePackage);
+
+  var sccachePath;
+  if (getExtension() == 'zip') {
+    sccachePath = await extractTar(sccachePackage);
+  } else {
+    sccachePath = await extractTar(sccachePackage);
+  }
+  console.log('sccache extracted to: ', sccachePath);
 
   // Cache sccache.
   const sccacheHome = await cacheDir(sccachePath, 'sccache', version);
+  console.log('sccache cached to: ', sccacheHome);
+
   // Add cached sccache into path.
   core.addPath(`${sccacheHome}`);
   // Expose the sccache path as env.

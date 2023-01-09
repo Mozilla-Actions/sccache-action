@@ -74,7 +74,7 @@ function getFilename(version) {
     return `sccache-${version}-${getArch()}-${getPlatform()}.${getExtension()}`;
 }
 function getDirname(version) {
-    return `sccache-${version}-${getArch()}-${getPlatform()}}`;
+    return `sccache-${version}-${getArch()}-${getPlatform()}`;
 }
 function getArch() {
     switch (process.arch) {

@@ -51,7 +51,7 @@ function getFilename(version: string): Error | string {
 }
 
 function getDirname(version: string): Error | string {
-  return `sccache-${version}-${getArch()}-${getPlatform()}}`;
+  return `sccache-${version}-${getArch()}-${getPlatform()}`;
 }
 
 function getArch(): Error | string {

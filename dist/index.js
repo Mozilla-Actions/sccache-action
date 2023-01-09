@@ -47,7 +47,7 @@ function setup() {
         // is not input.
         const version = core.getInput('version');
         console.log('try to setup for version: ', version);
-        const downloadUrl = `https://github.com/mozilla/sccache/releases/download/${version}/${getFilename}`;
+        const downloadUrl = `https://github.com/mozilla/sccache/releases/download/${version}/${getFilename(version)}`;
         console.log('try to setup from url: ', downloadUrl);
         // Download and extract.
         const sccachePackage = yield (0, tool_cache_1.downloadTool)(downloadUrl);

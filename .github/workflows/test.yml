@@ -32,6 +32,4 @@ jobs:
 
       - name: Run sccache stat for check
         shell: bash
-        run: |
-          ls /opt/hostedtoolcache/sccache/0.3.3/x64/ -lh
-          ${SCCACHE_PATH} --show-stats
+        run: ${SCCACHE_PATH} --show-stats

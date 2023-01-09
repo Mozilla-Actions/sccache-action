@@ -47,20 +47,22 @@ function setup() {
         // is not input.
         const version = core.getInput('version');
         console.log('try to setup sccache version: ', version);
-        const downloadUrl = `https://github.com/mozilla/sccache/releases/download/${version}/${getFilename(version)}`;
+        const filename = getFilename(version);
+        const dirname = getDirname(version);
+        const downloadUrl = `https://github.com/mozilla/sccache/releases/download/${version}/${filename}`;
         console.log('sccache download from url: ', downloadUrl);
         // Download and extract.
         const sccachePackage = yield (0, tool_cache_1.downloadTool)(downloadUrl);
         var sccachePath;
         if (getExtension() == 'zip') {
-            sccachePath = yield (0, tool_cache_1.extractTar)(sccachePackage);
+            sccachePath = yield (0, tool_cache_1.extractZip)(sccachePackage);
         }
         else {
             sccachePath = yield (0, tool_cache_1.extractTar)(sccachePackage);
         }
         console.log('sccache extracted to: ', sccachePath);
         // Cache sccache.
-        const sccacheHome = yield (0, tool_cache_1.cacheDir)(sccachePath, 'sccache', version);
+        const sccacheHome = yield (0, tool_cache_1.cacheDir)(`${sccachePath}/${dirname}`, 'sccache', version);
         console.log('sccache cached to: ', sccacheHome);
         // Add cached sccache into path.
         core.addPath(`${sccacheHome}`);
@@ -70,6 +72,9 @@ function setup() {
 }
 function getFilename(version) {
     return `sccache-${version}-${getArch()}-${getPlatform()}.${getExtension()}`;
+}
+function getDirname(version) {
+    return `sccache-${version}-${getArch()}-${getPlatform()}}`;
 }
 function getArch() {
     switch (process.arch) {

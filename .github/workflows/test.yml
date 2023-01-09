@@ -34,4 +34,4 @@ jobs:
         shell: bash
         run: |
           ls /opt/hostedtoolcache/sccache/0.3.3/x64/ -lh
-          ${SCCACHE_PATH} --stat
+          ${SCCACHE_PATH} --show-stats

@@ -5,9 +5,6 @@ import {
   extractZip,
   cacheDir
 } from '@actions/tool-cache';
-import {exec} from 'child_process';
-import * as fs from 'fs';
-import {promisify} from 'util';
 
 async function setup() {
   // TODO:  we can support install latest version by default if version

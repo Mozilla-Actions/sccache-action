@@ -17,7 +17,7 @@ async function setup() {
 
   // Download and extract.
   const sccachePackage = await downloadTool(downloadUrl);
-  const sccachePath = (await extractTar(sccachePackage)) + `/sccache`;
+  const sccachePath = await extractTar(sccachePackage);
 
   // Cache sccache.
   const sccacheHome = await cacheDir(sccachePath, 'sccache', version);

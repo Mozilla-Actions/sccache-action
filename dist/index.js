@@ -51,7 +51,7 @@ function setup() {
         console.log('try to setup from url: ', downloadUrl);
         // Download and extract.
         const sccachePackage = yield (0, tool_cache_1.downloadTool)(downloadUrl);
-        const sccachePath = (yield (0, tool_cache_1.extractTar)(sccachePackage)) + `/sccache`;
+        const sccachePath = yield (0, tool_cache_1.extractTar)(sccachePackage);
         // Cache sccache.
         const sccacheHome = yield (0, tool_cache_1.cacheDir)(sccachePath, 'sccache', version);
         // Add cached sccache into path.

@@ -1,0 +1,35 @@
+name: Test sccache
+
+on: [push, pull_request]
+
+jobs:
+  v0_3_3:
+    name: Test version 0.3.3
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-lastest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set Node.js 16.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+
+      - name: npm install
+        run: npm install
+
+      - name: Run sccache-cache
+        uses: ./
+        with:
+          version: "v0.3.3"
+
+      - name: Run sccache stat for check
+        shell: bash
+        run: ${SCCACHE_PATH} --stat

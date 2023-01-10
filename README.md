@@ -9,7 +9,18 @@ sccache artifacts.
 
 ## Usage
 
-TODO
+Just copy and paste the following in your GitHub action:
+
+```
+- name: Run sccache-cache
+  uses: mozilla/sccache-action@v0.0.1
+  with:
+    version: "v0.3.3"
+
+- name: Run sccache stat for check
+  shell: bash
+  run: ${SCCACHE_PATH} --show-stats
+```
 
 ## License
 

@@ -27,6 +27,9 @@ jobs:
         with:
           node-version: 16.x
           cache: npm
+
+      - name: npm install
+        run: npm install
       - name: Prettier Format Check
         run: npm run format-check
       - name: ESLint Check

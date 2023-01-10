@@ -45,7 +45,7 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
-          - macos-lastest
+          - macos-latest
 
     steps:
       - name: Checkout

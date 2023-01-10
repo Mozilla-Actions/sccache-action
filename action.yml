@@ -1,0 +1,14 @@
+---
+name: "Sccache Action"
+description: "Setup sccache action"
+author: "mozilla"
+inputs:
+  version:
+    description: "The installed sccache version."
+    required: true
+runs:
+  using: "node16"
+  main: "dist/index.js"
+branding:
+  icon: "star"
+  color: "orange"

@@ -1,0 +1,49 @@
+{
+  "name": "sccache-action",
+  "version": "0.0.1",
+  "description": "Github Action for Sccache",
+  "main": "dist/index.js",
+  "scripts": {
+    "tsc": "tsc",
+    "ncc": "ncc build lib/sccache.js",
+    "build": "prettier --write **/*.ts && tsc && ncc build lib/sccache.js",
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
+    "lint": "eslint **/*.ts --cache",
+    "test": "jest --passWithNoTests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mozilla/sccache-action.git"
+  },
+  "keywords": [
+    "sccache"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/mozilla/sccache-action/issues"
+  },
+  "homepage": "https://github.com/mozilla/sccache-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/io": "^1.1.2",
+    "@actions/tool-cache": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.4.1",
+    "@types/node": "^18.11.18",
+    "@vercel/ncc": "^0.36.0",
+    "jest": "^27.5.1",
+    "jest-circus": "^29.3.1",
+    "prettier": "^2.8.1",
+    "ts-jest": "^27.1.4",
+    "typescript": "^4.9.4",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^26.9.0",
+    "eslint-plugin-prettier": "^4.2.1"
+  }
+}

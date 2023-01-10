@@ -1,7 +1,11 @@
 # sccache-action
 
+Work in progress
+
 The goal of this project is to provide a simple GitHub action to download
 sccache artifacts.
+
+
 
 ## Usage
 

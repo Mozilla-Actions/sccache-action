@@ -9,6 +9,7 @@
     "build": "prettier --write **/*.ts && tsc && ncc build lib/sccache.js",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
+    "lint": "eslint **/*.ts --cache",
     "test": "jest"
   },
   "repository": {
@@ -37,6 +38,13 @@
     "jest-circus": "^29.3.1",
     "prettier": "^2.8.1",
     "ts-jest": "^27.1.4",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^26.9.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-simple-import-sort": "^7.0.0"
   }
 }

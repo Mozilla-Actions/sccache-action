@@ -35,7 +35,7 @@ async function setup() {
   // Download and extract.
   const sccachePackage = await downloadTool(downloadUrl);
 
-  var sccachePath;
+  let sccachePath;
   if (getExtension() == 'zip') {
     sccachePath = await extractZip(sccachePackage);
   } else {

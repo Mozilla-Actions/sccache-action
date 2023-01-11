@@ -64,7 +64,3 @@ jobs:
         uses: ./
         with:
           version: "v0.3.3"
-
-      - name: Run sccache stat for check
-        shell: bash
-        run: ${SCCACHE_PATH} --show-stats

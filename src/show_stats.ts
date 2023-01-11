@@ -29,8 +29,6 @@ async function show_stats() {
   await exec.getExecOutput(`${process.env.SCCACHE_PATH}`, ['--show-stats'], {
     listeners: defaultListener
   });
-
-  core.info(stdout.join(''));
 }
 
 show_stats().catch(err => {

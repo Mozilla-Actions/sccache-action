@@ -10,8 +10,6 @@ runs:
   using: "node16"
   main: "dist/setup/index.js"
   post: "dist/show_stats/index.js"
-  # windows can't run `--show-stats` while server is running.
-  post-if: runner.os != 'windows'
 branding:
   icon: "star"
   color: "orange"

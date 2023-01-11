@@ -4,7 +4,7 @@
   "description": "Github Action for Sccache",
   "main": "dist/setup/index.js",
   "scripts": {
-    "build-dist": "ncc build lib/setup.js -m -o dist/setup/ && ncc build lib/setup.js -m -o dist/show_stats",
+    "build-dist": "ncc build lib/setup.js -m -o dist/setup/ && ncc build lib/show_stats.js -m -o dist/show_stats",
     "build": "prettier --write **/*.ts && tsc && npm run build-dist",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",

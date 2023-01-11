@@ -13,23 +13,24 @@
 // limitations under the License.
 
 import * as core from '@actions/core';
-import {exec} from 'child_process';
+import * as exec from '@actions/exec';
 
 async function show_stats() {
   core.debug('start sccache show starts');
 
-  exec(
-    `${process.env.SCCACHE_PATH} --show-stats`,
-    (err: any, stdout: any, stderr: any) => {
-      core.info(stdout);
-      core.warning(stderr);
-
-      if (err) {
-        core.error('failed to show sccache stats');
-        throw new Error(err);
-      }
+  const defaultListener = {
+    stdout: (data: Buffer) => {
+      stdout.push(data.toString());
     }
-  );
+  };
+
+  const stdout: string[] = [];
+
+  await exec.exec(`${process.env.SCCACHE_PATH}`, ['--show-stats'], {
+    listeners: defaultListener
+  });
+
+  core.info(stdout.join(''));
 }
 
 show_stats().catch(err => {

@@ -26,7 +26,7 @@ async function show_stats() {
 
   const stdout: string[] = [];
 
-  await exec.exec(`${process.env.SCCACHE_PATH}`, ['--show-stats'], {
+  await exec.getExecOutput(`${process.env.SCCACHE_PATH}`, ['--show-stats'], {
     listeners: defaultListener
   });
 

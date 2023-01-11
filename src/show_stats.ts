@@ -16,7 +16,8 @@ import * as core from '@actions/core';
 import {exec} from 'child_process';
 
 async function show_stats() {
-  // Start hdfs daemon.
+  core.debug('start sccache show starts');
+
   exec(
     `${process.env.SCCACHE_PATH} --show-stats`,
     (err: any, stdout: any, stderr: any) => {

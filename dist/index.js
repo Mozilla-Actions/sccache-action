@@ -66,7 +66,7 @@ function setup() {
         console.log('sccache download from url: ', downloadUrl);
         // Download and extract.
         const sccachePackage = yield (0, tool_cache_1.downloadTool)(downloadUrl);
-        var sccachePath;
+        let sccachePath;
         if (getExtension() == 'zip') {
             sccachePath = yield (0, tool_cache_1.extractZip)(sccachePackage);
         }
@@ -81,6 +81,10 @@ function setup() {
         core.addPath(`${sccacheHome}`);
         // Expose the sccache path as env.
         core.exportVariable('SCCACHE_PATH', `${sccacheHome}/sccache`);
+        // Expose the gha cache related variable to make users eaiser to
+        // integrate with gha support.
+        core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+        core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
     });
 }
 function getFilename(version) {

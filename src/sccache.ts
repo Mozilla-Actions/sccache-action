@@ -55,6 +55,14 @@ async function setup() {
   core.addPath(`${sccacheHome}`);
   // Expose the sccache path as env.
   core.exportVariable('SCCACHE_PATH', `${sccacheHome}/sccache`);
+
+  // Expose the gha cache related variable to make users eaiser to
+  // integrate with gha support.
+  core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+  core.exportVariable(
+    'ACTIONS_RUNTIME_TOKEN',
+    process.env.ACTIONS_RUNTIME_TOKEN || ''
+  );
 }
 
 function getFilename(version: string): Error | string {

@@ -23,6 +23,16 @@ Just copy and paste the following in your GitHub action:
   run: ${SCCACHE_PATH} --show-stats
 ```
 
+### Rust code
+
+For Rust code, the following environment variables should be set:
+
+```
+    env:
+      SCCACHE_GHA_ENABLED: "true"
+      RUSTC_WRAPPER: "sccache"
+```
+
 ## Prepare a new release
 
 1. Update README.md in the examplee

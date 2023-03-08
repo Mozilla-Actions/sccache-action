@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mozilla/sccache-action.git"
+    "url": "git+https://github.com/mozilla-actions/sccache-action.git"
   },
   "keywords": [
     "sccache"
@@ -21,9 +21,9 @@
   "author": "",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/mozilla/sccache-action/issues"
+    "url": "https://github.com/mozilla-actions/sccache-action/issues"
   },
-  "homepage": "https://github.com/mozilla/sccache-action#readme",
+  "homepage": "https://github.com/mozilla-actions/sccache-action#readme",
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@actions/io": "^1.1.2",

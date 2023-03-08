@@ -13,7 +13,7 @@ Just copy and paste the following in your GitHub action:
 - name: Run sccache-cache
   uses: mozilla-actions/sccache-action@v0.0.2
   with:
-    version: "v0.3.3"
+    version: "v0.4.0-pre.9"
 ```
 
 ```

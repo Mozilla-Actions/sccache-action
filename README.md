@@ -1,10 +1,7 @@
 # sccache-action
 
-Work in progress
-
-The goal of this project is to provide a simple GitHub action to download
-sccache artifacts.
-
+The [sccache](https://github.com/mozilla/sccache/
+) action can be used in GitHub Actions workflows to integrate sccache into the build process. The sccache action is a step in a workflow that can be used to cache compilation results for subsequent builds, reducing the build time and speeding up the overall development process.
 
 
 ## Usage

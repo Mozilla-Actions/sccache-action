@@ -8,7 +8,8 @@ inputs:
     required: true
 runs:
   using: "node16"
-  main: "dist/index.js"
+  main: "dist/setup/index.js"
+  post: "dist/show_stats/index.js"
 branding:
   icon: "star"
   color: "orange"

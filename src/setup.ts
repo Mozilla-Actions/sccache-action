@@ -24,13 +24,13 @@ async function setup() {
   // TODO:  we can support install latest version by default if version
   // is not input.
   const version = core.getInput('version');
-  console.log('try to setup sccache version: ', version);
+  core.info(`try to setup sccache version: ${version}'`);
 
   const filename = getFilename(version);
   const dirname = getDirname(version);
 
   const downloadUrl = `https://github.com/mozilla/sccache/releases/download/${version}/${filename}`;
-  console.log('sccache download from url: ', downloadUrl);
+  core.info(`sccache download from url: ${downloadUrl}`);
 
   // Download and extract.
   const sccachePackage = await downloadTool(downloadUrl);
@@ -41,7 +41,7 @@ async function setup() {
   } else {
     sccachePath = await extractTar(sccachePackage);
   }
-  console.log('sccache extracted to: ', sccachePath);
+  core.info(`sccache extracted to: ${sccachePath}`);
 
   // Cache sccache.
   const sccacheHome = await cacheDir(
@@ -49,12 +49,20 @@ async function setup() {
     'sccache',
     version
   );
-  console.log('sccache cached to: ', sccacheHome);
+  core.info(`sccache cached to: ${sccacheHome}`);
 
   // Add cached sccache into path.
   core.addPath(`${sccacheHome}`);
   // Expose the sccache path as env.
   core.exportVariable('SCCACHE_PATH', `${sccacheHome}/sccache`);
+
+  // Expose the gha cache related variable to make users eaiser to
+  // integrate with gha support.
+  core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+  core.exportVariable(
+    'ACTIONS_RUNTIME_TOKEN',
+    process.env.ACTIONS_RUNTIME_TOKEN || ''
+  );
 }
 
 function getFilename(version: string): Error | string {

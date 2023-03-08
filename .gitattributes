@@ -1,2 +1,3 @@
 # Ignore dist changes
-dist/index.js -diff
+dist/setup/index.js -diff
+dist/show_stats/index.js -diff

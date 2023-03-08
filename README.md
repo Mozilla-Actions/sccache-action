@@ -29,6 +29,13 @@ Just copy and paste the following in your GitHub action:
   run: ${SCCACHE_PATH} --show-stats
 ```
 
+## Prepare a new release
+
+1. Update README.md in the examplee
+1. Update version in `package.json`
+1. Run `npm i --package-lock-only`
+1. Tag a new release
+
 ## License
 
 Apache-2.0 (just like sccache)

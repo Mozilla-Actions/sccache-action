@@ -9,11 +9,21 @@ The [sccache](https://github.com/mozilla/sccache/
 Just copy and paste the following in your GitHub action:
 
 ```
+# Using the latest version of sccache
+- name: Run sccache-cache
+  uses: mozilla/sccache-action@v0.0.1
+```
+
+```
+# Specify a given version of sccache
 - name: Run sccache-cache
   uses: mozilla/sccache-action@v0.0.1
   with:
     version: "v0.3.3"
+```
 
+```
+# To get the execution stats
 - name: Run sccache stat for check
   shell: bash
   run: ${SCCACHE_PATH} --show-stats

@@ -3,6 +3,10 @@
 The [sccache](https://github.com/mozilla/sccache/
 ) action can be used in GitHub Actions workflows to integrate sccache into the build process. The sccache action is a step in a workflow that can be used to cache compilation results for subsequent builds, reducing the build time and speeding up the overall development process.
 
+sccache can easily use GitHub actions cache with almost no configuration.
+
+This action is available on:
+https://github.com/marketplace/actions/sccache-action
 
 ## Usage
 
@@ -40,7 +44,7 @@ For Rust code, the following environment variables should be set:
 
 ## Prepare a new release
 
-1. Update README.md in the examplee
+1. Update the example in README.md
 1. Update version in `package.json`
 1. Run `npm i --package-lock-only`
 1. Tag a new release

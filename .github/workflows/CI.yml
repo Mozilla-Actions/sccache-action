@@ -37,8 +37,8 @@ jobs:
       - name: Build & Test
         run: npm run test
 
-  test_v0_3_3:
-    name: Test version 0.3.3
+  test_v0_4_0:
+    name: Test version 0.4.0
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -63,7 +63,7 @@ jobs:
       - name: Run sccache-cache
         uses: ./
         with:
-          version: "v0.3.3"
+          version: "v0.4.0"
 
       - name: Run sccache for check
         shell: bash

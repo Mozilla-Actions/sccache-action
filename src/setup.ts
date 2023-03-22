@@ -65,9 +65,8 @@ async function setup() {
   if (calculatedChecksum !== providedChecksum) {
     core.setFailed('Checksum verification failed');
     return;
-  } else {
-    core.info(`Correct checksum: ${calculatedChecksum}`);
   }
+  core.info(`Correct checksum: ${calculatedChecksum}`);
 
   let sccachePath;
   if (getExtension() == 'zip') {

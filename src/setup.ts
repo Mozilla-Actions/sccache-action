@@ -20,6 +20,10 @@ import {
   cacheDir
 } from '@actions/tool-cache';
 
+import * as fs from 'fs';
+
+import * as crypto from 'crypto';
+
 async function setup() {
   // TODO:  we can support install latest version by default if version
   // is not input.
@@ -30,10 +34,31 @@ async function setup() {
   const dirname = getDirname(version);
 
   const downloadUrl = `https://github.com/mozilla/sccache/releases/download/${version}/${filename}`;
+  const sha256Url = `${downloadUrl}.sha256`;
   core.info(`sccache download from url: ${downloadUrl}`);
 
   // Download and extract.
   const sccachePackage = await downloadTool(downloadUrl);
+  const sha256File = await downloadTool(sha256Url);
+
+  // Calculate the SHA256 checksum of the downloaded file.
+  const fileBuffer = await fs.promises.readFile(sccachePackage);
+  const hash = crypto.createHash('sha256');
+  hash.update(fileBuffer);
+  const calculatedChecksum = hash.digest('hex');
+
+  // Read the provided checksum from the .sha256 file.
+  const providedChecksum = (await fs.promises.readFile(sha256File))
+    .toString()
+    .trim();
+
+  // Compare the checksums.
+  if (calculatedChecksum !== providedChecksum) {
+    core.setFailed('Checksum verification failed');
+    return;
+  } else {
+    core.info(`Correct checksum: ${calculatedChecksum}`);
+  }
 
   let sccachePath;
   if (getExtension() == 'zip') {

@@ -4,8 +4,10 @@ description: "Setup sccache action"
 author: "mozilla"
 inputs:
   version:
-    description: "The installed sccache version."
-    required: true
+    description: "The installed sccache version. Use the latest version of sccache if not specified."
+  token:
+    description: "Used to pull the latest release from sccache. When running this action outside of github.com, you have to pass a personal access token for github.com."
+    default: ${{ github.server_url == 'https://github.com' && github.token || '' }}
 runs:
   using: "node16"
   main: "dist/setup/index.js"

@@ -42,6 +42,30 @@ For Rust code, the following environment variables should be set:
       RUSTC_WRAPPER: "sccache"
 ```
 
+### C/C++ code
+
+For C/C++ code, the following environment variables should be set:
+
+```
+    env:
+      SCCACHE_GHA_ENABLED: "true"
+```
+
+With cmake, add the following argument:
+
+```
+-DCMAKE_C_COMPILER_LAUNCHER=sccache
+-DCMAKE_CXX_COMPILER_LAUNCHER=sccache
+```
+
+With configure, call it with:
+```
+# With gcc
+./configure CC="sccache gcc" CXX=scache gcc"
+# With clang
+./configure CC="sccache clang" CXX=scache clang"
+```
+
 ## Prepare a new release
 
 1. Update the example in README.md

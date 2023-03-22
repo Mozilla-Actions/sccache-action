@@ -19,16 +19,25 @@ import {
   extractZip,
   cacheDir
 } from '@actions/tool-cache';
+import {getOctokit} from '@actions/github';
 
 import * as fs from 'fs';
 
 import * as crypto from 'crypto';
 
 async function setup() {
-  // TODO:  we can support install latest version by default if version
-  // is not input.
-  const version = core.getInput('version');
-  core.info(`try to setup sccache version: ${version}'`);
+  let version = core.getInput('version');
+  if (version.length === 0) {
+    // If no version is specified, the latest version is used by default.
+    const token = core.getInput('token', {required: true});
+    const octokit = getOctokit(token);
+    const release = await octokit.rest.repos.getLatestRelease({
+      owner: 'mozilla',
+      repo: 'sccache'
+    });
+    version = release.data.tag_name;
+  }
+  core.info(`try to setup sccache version: ${version}`);
 
   const filename = getFilename(version);
   const dirname = getDirname(version);

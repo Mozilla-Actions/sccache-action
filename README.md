@@ -12,6 +12,13 @@ https://github.com/marketplace/actions/sccache-action
 
 Just copy and paste the following in your GitHub action:
 
+### Use the latest version of sccache if no version is specified
+
+```
+- name: Run sccache-cache
+  uses: mozilla-actions/sccache-action@v0.0.2
+```
+
 ### Specify a given version of sccache
 
 ```

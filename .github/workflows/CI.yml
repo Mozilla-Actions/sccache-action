@@ -37,8 +37,8 @@ jobs:
       - name: Build & Test
         run: npm run test
 
-  test_v0_4_0:
-    name: Test version 0.4.0
+  test:
+    name: Test version
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -46,6 +46,9 @@ jobs:
           - ubuntu-latest
           - windows-latest
           - macos-latest
+        version:
+          - ""
+          - v0.4.0
 
     steps:
       - name: Checkout
@@ -63,7 +66,7 @@ jobs:
       - name: Run sccache-cache
         uses: ./
         with:
-          version: "v0.4.0"
+          version: ${{ matrix.version }}
 
       - name: Run sccache for check
         shell: bash

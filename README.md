@@ -16,14 +16,14 @@ Just copy and paste the following in your GitHub action:
 
 ```
 - name: Run sccache-cache
-  uses: mozilla-actions/sccache-action@v0.0.2
+  uses: mozilla-actions/sccache-action@v0.0.3
 ```
 
 ### Specify a given version of sccache
 
 ```
 - name: Run sccache-cache
-  uses: mozilla-actions/sccache-action@v0.0.2
+  uses: mozilla-actions/sccache-action@v0.0.3
   with:
     version: "v0.4.0"
 ```

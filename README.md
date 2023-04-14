@@ -68,9 +68,9 @@ With cmake, add the following argument:
 With configure, call it with:
 ```
 # With gcc
-./configure CC="sccache gcc" CXX=scache gcc"
+./configure CC="sccache gcc" CXX=sccache gcc"
 # With clang
-./configure CC="sccache clang" CXX=scache clang"
+./configure CC="sccache clang" CXX=sccache clang"
 ```
 
 ## Prepare a new release

@@ -15,7 +15,7 @@
 import * as core from '@actions/core';
 import * as exec from '@actions/exec';
 
-async function show_stats() {
+export async function show_stats() {
   core.debug('start sccache show starts');
 
   const defaultListener = {
@@ -30,8 +30,3 @@ async function show_stats() {
     listeners: defaultListener
   });
 }
-
-show_stats().catch(err => {
-  core.error(err);
-  core.setFailed(err.message);
-});

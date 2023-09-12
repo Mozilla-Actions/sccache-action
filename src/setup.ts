@@ -24,6 +24,7 @@ import {getOctokit} from '@actions/github';
 import * as fs from 'fs';
 
 import * as crypto from 'crypto';
+import {pleaseRestore} from './cache';
 
 async function setup() {
   let version = core.getInput('version');
@@ -84,6 +85,8 @@ async function setup() {
   );
   core.info(`sccache cached to: ${sccacheHome}`);
 
+  // core.exportVariable('SCCACHE_CACHE_DIR', `${sccacheHome}`);
+
   // Add cached sccache into path.
   core.addPath(`${sccacheHome}`);
   // Expose the sccache path as env.
@@ -96,6 +99,14 @@ async function setup() {
     'ACTIONS_RUNTIME_TOKEN',
     process.env.ACTIONS_RUNTIME_TOKEN || ''
   );
+
+  // TODO: get this the right way
+  core.exportVariable('SCCACHE_CACHE_DIR', `/home/runner/.cache/sccache`);
+
+  await pleaseRestore();
+
+  // convenience
+  core.exportVariable('RUSTC_WRAPPER', `sccache`);
 }
 
 function getFilename(version: string): Error | string {

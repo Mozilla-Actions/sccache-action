@@ -11,7 +11,7 @@ inputs:
 runs:
   using: "node16"
   main: "dist/setup/index.js"
-  post: "dist/show_stats/index.js"
+  post: "dist/post_run/index.js"
 branding:
   icon: "star"
   color: "orange"

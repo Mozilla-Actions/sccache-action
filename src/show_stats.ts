@@ -16,7 +16,7 @@ import * as core from '@actions/core';
 import * as exec from '@actions/exec';
 
 export async function show_stats() {
-  core.debug('start sccache show starts');
+  core.debug('show stats');
 
   const defaultListener = {
     stdout: (data: Buffer) => {

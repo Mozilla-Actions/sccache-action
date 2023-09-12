@@ -25,6 +25,7 @@ import * as fs from 'fs';
 
 import * as crypto from 'crypto';
 import {pleaseRestore} from './cache';
+import {exec, ExecOptions} from '@actions/exec';
 
 async function setup() {
   let version = core.getInput('version');
@@ -85,8 +86,6 @@ async function setup() {
   );
   core.info(`sccache cached to: ${sccacheHome}`);
 
-  // core.exportVariable('SCCACHE_CACHE_DIR', `${sccacheHome}`);
-
   // Add cached sccache into path.
   core.addPath(`${sccacheHome}`);
   // Expose the sccache path as env.
@@ -101,11 +100,35 @@ async function setup() {
   );
 
   // TODO: get this the right way
-  core.exportVariable('SCCACHE_CACHE_DIR', `/home/runner/.cache/sccache`);
+  let myOutput = '';
+  let myError = '';
+
+  const options: ExecOptions = {};
+  options.listeners = {
+    stdout: (data: Buffer) => {
+      myOutput += data.toString();
+    },
+    stderr: (data: Buffer) => {
+      myError += data.toString();
+    }
+  };
+
+  await exec(
+    `${sccacheHome}/sccache`,
+    ['--show-stats', '--stats-format', 'json'],
+    options
+  ).catch(e => {
+    console.log(`exec error: ${e}`);
+    console.log(myError);
+  });
+  const json = JSON.parse(myOutput);
+  console.log(`\n${json.cache_location}`);
+  let cache_path = json.cache_location.split(':')[1].trim().slice(1, -1);
+
+  core.exportVariable('SCCACHE_CACHE_DIR', cache_path);
 
   await pleaseRestore();
 
-  // convenience
   core.exportVariable('RUSTC_WRAPPER', `sccache`);
 }
 

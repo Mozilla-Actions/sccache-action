@@ -1,8 +1,11 @@
 import {saveCache, restoreCache} from '@actions/cache';
+import * as core from '@actions/core';
+import * as gh from '@actions/github';
 
 const key = 'sccache';
 export const pleaseSave = async () => {
-  const path = process.env.SCCACHE_CACHE_DIR; // note: hard coded for now to: '/home/runner/.cache/sccache';
+  const path = process.env.SCCACHE_CACHE_DIR;
+  console.log(path);
   if (!path) {
     console.log(`no sccache dir found in SCCACHE_CACHE_DIR ${path}`);
     return;
@@ -11,10 +14,37 @@ export const pleaseSave = async () => {
 };
 
 export const pleaseRestore = async () => {
+  console.log('restore sccache files');
   const path = process.env.SCCACHE_CACHE_DIR;
+  console.log(path);
   if (!path) {
     console.log(`no sccache dir found in SCCACHE_CACHE_DIR ${path}`);
     return;
   }
-  await restoreCache([path], key);
+  await restoreCache([path], key).then(r => {
+    console.log(`successfully restored cache: ${JSON.stringify(r)}`);
+  });
+};
+
+export const deduplicate = async () => {
+  console.log('trying to deduplicate cache');
+  const token = core.getInput('token', {required: true});
+  const octokit = gh.getOctokit(token);
+
+  const res = await octokit.rest.actions
+    .deleteActionsCacheByKey({
+      owner: gh.context.repo.owner,
+      repo: gh.context.repo.repo,
+      key
+    })
+    .then(() => {
+      // TODO: more info
+      return 'successfully deleted cache';
+    })
+    .catch(e => {
+      console.log(`catch: ${e}`);
+      return 'nothing to delete';
+    });
+
+  console.log(`delete cache api response: ${res}`);
 };

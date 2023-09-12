@@ -4,8 +4,12 @@ import {show_stats} from './show_stats';
 
 const postRun = async () => {
   await show_stats();
-  await deduplicate();
-  await pleaseSave();
+
+  const is_local = core.getInput('local', {required: false});
+  if (is_local == 'true') {
+    await deduplicate();
+    await pleaseSave();
+  }
 };
 
 postRun().catch(err => {

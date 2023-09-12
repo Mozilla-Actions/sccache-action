@@ -8,6 +8,9 @@ inputs:
   token:
     description: "Used to pull the latest release from sccache. When running this action outside of github.com, you have to pass a personal access token for github.com."
     default: ${{ github.server_url == 'https://github.com' && github.token || '' }}
+  local:
+    description: "Creates a single cache artifact. Uses the local cache of the runner, saving and restoring. Will not create duplicate caches, only a single `sccache` bundle"
+    default: "true"
 runs:
   using: "node16"
   main: "dist/setup/index.js"

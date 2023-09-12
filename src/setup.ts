@@ -99,37 +99,39 @@ async function setup() {
     process.env.ACTIONS_RUNTIME_TOKEN || ''
   );
 
-  // TODO: get this the right way
-  let myOutput = '';
-  let myError = '';
+  const is_local = core.getInput('local', {required: false});
 
-  const options: ExecOptions = {};
-  options.listeners = {
-    stdout: (data: Buffer) => {
-      myOutput += data.toString();
-    },
-    stderr: (data: Buffer) => {
-      myError += data.toString();
-    }
-  };
+  if (is_local == 'true') {
+    let myOutput = '';
+    let myError = '';
 
-  await exec(
-    `${sccacheHome}/sccache`,
-    ['--show-stats', '--stats-format', 'json'],
-    options
-  ).catch(e => {
-    console.log(`exec error: ${e}`);
-    console.log(myError);
-  });
-  const json = JSON.parse(myOutput);
-  console.log(`\n${json.cache_location}`);
-  let cache_path = json.cache_location.split(':')[1].trim().slice(1, -1);
+    const options: ExecOptions = {};
+    options.listeners = {
+      stdout: (data: Buffer) => {
+        myOutput += data.toString();
+      },
+      stderr: (data: Buffer) => {
+        myError += data.toString();
+      }
+    };
 
-  core.exportVariable('SCCACHE_CACHE_DIR', cache_path);
+    await exec(
+      `${sccacheHome}/sccache`,
+      ['--show-stats', '--stats-format', 'json'],
+      options
+    ).catch(e => {
+      console.log(`exec error: ${e}`);
+      console.log(myError);
+    });
+    const json = JSON.parse(myOutput);
+    console.log(`\n${json.cache_location}`);
+    let cache_path = json.cache_location.split(':')[1].trim().slice(1, -1);
 
-  await pleaseRestore();
+    core.exportVariable('SCCACHE_CACHE_DIR', cache_path);
 
-  core.exportVariable('RUSTC_WRAPPER', `sccache`);
+    await pleaseRestore();
+    core.exportVariable('RUSTC_WRAPPER', `sccache`);
+  }
 }
 
 function getFilename(version: string): Error | string {

@@ -22,7 +22,9 @@ export const pleaseRestore = async () => {
     return;
   }
   await restoreCache([path], key).then(r => {
-    console.log(`successfully restored cache: ${JSON.stringify(r)}`);
+    if (!r) {
+      console.log(`no cache matching "${path}" to restore`);
+    }
   });
 };
 

@@ -34,8 +34,8 @@ jobs:
         run: npm run format-check
       - name: ESLint Check
         run: npm run lint
-      - name: Build & Test
-        run: npm run test
+      - name: Builds
+        run: npm run build
 
   test:
     name: Test version
@@ -70,4 +70,18 @@ jobs:
 
       - name: Run sccache for check
         shell: bash
-        run: ${SCCACHE_PATH} --start-server
+        run: ${SCCACHE_PATH} --show-stats
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: 1.70.0
+          override: true
+
+      - name: install any cargo
+        shell: bash
+        working-directory: ./test-src
+        run: cargo build
+
+
+

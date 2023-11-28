@@ -25,7 +25,7 @@ Just copy and paste the following in your GitHub action:
 - name: Run sccache-cache
   uses: mozilla-actions/sccache-action@v0.0.3
   with:
-    version: "v0.5.2"
+    version: "v0.7.4"
 ```
 
 ### To get the execution stats

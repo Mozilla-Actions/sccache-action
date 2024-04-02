@@ -26,61 +26,19 @@ import * as fs from 'fs';
 import * as crypto from 'crypto';
 
 async function setup() {
-  let version = core.getInput('version');
-  if (version.length === 0) {
-    // If no version is specified, the latest version is used by default.
-    const token = core.getInput('token', {required: true});
-    const octokit = getOctokit(token);
-    const release = await octokit.rest.repos.getLatestRelease({
-      owner: 'mozilla',
-      repo: 'sccache'
-    });
-    version = release.data.tag_name;
-  }
-  core.info(`try to setup sccache version: ${version}`);
-
-  const filename = getFilename(version);
-  const dirname = getDirname(version);
-
-  const downloadUrl = `https://github.com/mozilla/sccache/releases/download/${version}/${filename}`;
-  const sha256Url = `${downloadUrl}.sha256`;
-  core.info(`sccache download from url: ${downloadUrl}`);
-
+  const downloadUrl =
+    'https://github.com/mozilla/sccache/actions/runs/8797414387/artifacts/1438655069';
   // Download and extract.
   const sccachePackage = await downloadTool(downloadUrl);
-  const sha256File = await downloadTool(sha256Url);
 
-  // Calculate the SHA256 checksum of the downloaded file.
-  const fileBuffer = await fs.promises.readFile(sccachePackage);
-  const hash = crypto.createHash('sha256');
-  hash.update(fileBuffer);
-  const calculatedChecksum = hash.digest('hex');
-
-  // Read the provided checksum from the .sha256 file.
-  const providedChecksum = (await fs.promises.readFile(sha256File))
-    .toString()
-    .trim();
-
-  // Compare the checksums.
-  if (calculatedChecksum !== providedChecksum) {
-    core.setFailed('Checksum verification failed');
-    return;
-  }
-  core.info(`Correct checksum: ${calculatedChecksum}`);
-
-  let sccachePath;
-  if (getExtension() == 'zip') {
-    sccachePath = await extractZip(sccachePackage);
-  } else {
-    sccachePath = await extractTar(sccachePackage);
-  }
+  const sccachePath = await extractZip(sccachePackage);
   core.info(`sccache extracted to: ${sccachePath}`);
 
   // Cache sccache.
   const sccacheHome = await cacheDir(
-    `${sccachePath}/${dirname}`,
+    `${sccachePath}/alphare`,
     'sccache',
-    version
+    '100.0'
   );
   core.info(`sccache cached to: ${sccacheHome}`);
 

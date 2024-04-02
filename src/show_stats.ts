@@ -29,6 +29,10 @@ async function show_stats() {
   await exec.getExecOutput(`${process.env.SCCACHE_PATH}`, ['--show-stats'], {
     listeners: defaultListener
   });
+
+  await exec.getExecOutput(`${process.env.SCCACHE_PATH}`, ['--upload-cache'], {
+    listeners: defaultListener
+  });
 }
 
 show_stats().catch(err => {

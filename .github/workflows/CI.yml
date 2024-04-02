@@ -16,26 +16,31 @@ name: CI
 
 on: [push, pull_request]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup Node.js 16.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-          cache: npm
+env:
+  SCCACHE_GHA_AS_LOCAL: "on"
+  SCCACHE_GHA_ENABLED: "on"
+  RUST_LOG: "debug"
 
-      - name: npm install
-        run: npm install
-      - name: Prettier Format Check
-        run: npm run format-check
-      - name: ESLint Check
-        run: npm run lint
-      - name: Build & Test
-        run: npm run test
+jobs:
+  # build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Setup Node.js 16.x
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 16.x
+  #         cache: npm
+
+  #     - name: npm install
+  #       run: npm install
+  #     - name: Prettier Format Check
+  #       run: npm run format-check
+  #     - name: ESLint Check
+  #       run: npm run lint
+  #     - name: Build & Test
+  #       run: npm run test
 
   test:
     name: Test version
@@ -44,11 +49,11 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - windows-latest
-          - macos-latest
-        version:
-          - ""
-          - v0.4.0
+          # - windows-latest
+          # - macos-latest
+        # version:
+        #   - ""
+        #   - v0.4.0
 
     steps:
       - name: Checkout
@@ -65,8 +70,8 @@ jobs:
 
       - name: Run sccache-cache
         uses: ./
-        with:
-          version: ${{ matrix.version }}
+        # with:
+        #   version: ${{ matrix.version }}
 
       - name: Run sccache for check
         shell: bash

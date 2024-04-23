@@ -89,7 +89,7 @@ async function setup() {
   // Expose the sccache path as env.
   core.exportVariable('SCCACHE_PATH', `${sccacheHome}/sccache`);
 
-  // Expose the gha cache related variable to make users easier to
+  // Expose the gha cache related variable to make it easier for users to
   // integrate with gha support.
   core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
   core.exportVariable(

@@ -40,7 +40,8 @@ async function show_stats() {
     ]);
   });
 
-  const formatted_stats = format_json_stats(json_stats);
+  const stats: Stats = JSON.parse(json_stats);
+  const formatted_stats = format_json_stats(stats);
 
   core.notice(formatted_stats.notice, {
     title: 'sccache stats'
@@ -53,6 +54,10 @@ async function show_stats() {
   core.summary.addDetails(
     'Full human-readable stats',
     '\n\n```\n' + human_stats + '\n```\n\n'
+  );
+  core.summary.addDetails(
+    'Full JSON Stats',
+    '\n\n```json\n' + JSON.stringify(stats, null, 2) + '\n```\n\n'
   );
 
   await core.summary.write();
@@ -104,14 +109,15 @@ function format_duration(duration: Duration): string {
   return `${duration.secs}s ${ms}ms`;
 }
 
-function format_json_stats(raw_stats: string): {
+function format_json_stats(stats: Stats): {
   table: SummaryTableRow[];
   notice: string;
 } {
-  const stats: Stats = JSON.parse(raw_stats);
-  const cache_error_count = sum_stats(stats.stats.cache_errors).toString();
-  const cache_hit_count = sum_stats(stats.stats.cache_hits).toString();
-  const cache_miss_count = sum_stats(stats.stats.cache_misses).toString();
+  const cache_error_count = sum_stats(stats.stats.cache_errors);
+  const cache_hit_count = sum_stats(stats.stats.cache_hits);
+  const cache_miss_count = sum_stats(stats.stats.cache_misses);
+  const total_hits = cache_hit_count + cache_miss_count + cache_error_count;
+  const ratio = percentage(cache_hit_count, total_hits);
 
   const write_duration = format_duration(stats.stats.cache_write_duration);
   const read_duration = format_duration(stats.stats.cache_read_hit_duration);
@@ -119,9 +125,10 @@ function format_json_stats(raw_stats: string): {
     stats.stats.compiler_write_duration
   );
 
-  const notice = `${cache_hit_count} hits, ${cache_miss_count} misses, ${cache_error_count} errors`;
+  const notice = `${ratio}% - ${cache_hit_count} hits, ${cache_miss_count} misses, ${cache_error_count} errors`;
 
   const table = [
+    [{data: 'Cache hit %', header: true}, {data: ratio.toString()}],
     [{data: 'Cache hits', header: true}, {data: cache_hit_count.toString()}],
     [{data: 'Cache misses', header: true}, {data: cache_miss_count.toString()}],
     [
@@ -148,6 +155,9 @@ function format_json_stats(raw_stats: string): {
     [{data: 'Cache read hit duration', header: true}, {data: read_duration}],
     [{data: 'Compiler write duration', header: true}, {data: compiler_duration}]
   ];
-
   return {table, notice};
+}
+
+function percentage(x: number, y: number): number {
+  return Math.round((x / y) * 100 || 0);
 }

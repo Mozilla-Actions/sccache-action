@@ -128,7 +128,7 @@ function format_json_stats(stats: Stats): {
   const notice = `${ratio}% - ${cache_hit_count} hits, ${cache_miss_count} misses, ${cache_error_count} errors`;
 
   const table = [
-    [{data: 'Cache hit %', header: true}, {data: ratio.toString()}],
+    [{data: 'Cache hit %', header: true}, {data: `${ratio}%`}],
     [{data: 'Cache hits', header: true}, {data: cache_hit_count.toString()}],
     [{data: 'Cache misses', header: true}, {data: cache_miss_count.toString()}],
     [

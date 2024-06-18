@@ -43,7 +43,7 @@ async function setup() {
   // Search local file system cache for sccache.
   // This is useful when actions run on a self-hosted runner.
   let sccacheHome = find('sccache', version);
-  if (!sccacheHome) {
+  if (sccacheHome === '') {
     const sccachePath = await downloadSCCache(version);
     if (sccachePath instanceof Error) {
       core.setFailed(sccachePath.message);

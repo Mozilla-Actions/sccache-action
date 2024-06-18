@@ -113,7 +113,7 @@ function getArch(): Error | string {
     case 'arm64':
       return 'aarch64';
     default:
-      return Error('Unsupported arch "${process.arch}"');
+      return Error(`Unsupported arch "${process.arch}"`);
   }
 }
 
@@ -126,7 +126,7 @@ function getPlatform(): Error | string {
     case 'linux':
       return 'unknown-linux-musl';
     default:
-      return Error('Unsupported platform "${process.platform}"');
+      return Error(`Unsupported platform "${process.platform}"`);
   }
 }
 

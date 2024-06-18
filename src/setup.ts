@@ -19,7 +19,7 @@ import {
   extractZip,
   cacheDir
 } from '@actions/tool-cache';
-import { getOctokit } from '@actions/github';
+import {getOctokit} from '@actions/github';
 
 import * as fs from 'fs';
 
@@ -29,7 +29,7 @@ async function setup() {
   let version = core.getInput('version');
   if (version.length === 0) {
     // If no version is specified, the latest version is used by default.
-    const token = core.getInput('token', { required: true });
+    const token = core.getInput('token', {required: true});
     const octokit = getOctokit(token);
     const release = await octokit.rest.repos.getLatestRelease({
       owner: 'mozilla',

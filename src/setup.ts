@@ -17,7 +17,8 @@ import {
   downloadTool,
   extractTar,
   extractZip,
-  cacheDir
+  cacheDir,
+  find
 } from '@actions/tool-cache';
 import {getOctokit} from '@actions/github';
 
@@ -39,8 +40,45 @@ async function setup() {
   }
   core.info(`try to setup sccache version: ${version}`);
 
+  // Search local file system cache for sccache.
+  // This is useful when actions run on a self-hosted runner.
+  let sccacheHome = find('sccache', version);
+  if (sccacheHome === '') {
+    const sccachePath = await downloadSCCache(version);
+    if (sccachePath instanceof Error) {
+      core.setFailed(sccachePath.message);
+      return;
+    } else {
+      const dirname = getDirname(version);
+      // Cache sccache.
+      sccacheHome = await cacheDir(
+        `${sccachePath}/${dirname}`,
+        'sccache',
+        version
+      );
+      core.info(`sccache cached to: ${sccacheHome}`);
+    }
+  } else {
+    core.info(`find sccache at: ${sccacheHome}`);
+  }
+  // Add sccache into path.
+  core.addPath(`${sccacheHome}`);
+  // Expose the sccache path as env.
+  core.exportVariable('SCCACHE_PATH', `${sccacheHome}/sccache`);
+
+  // Expose the gha cache related variable to make it easier for users to
+  // integrate with gha support.
+  core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+  core.exportVariable(
+    'ACTIONS_RUNTIME_TOKEN',
+    process.env.ACTIONS_RUNTIME_TOKEN || ''
+  );
+}
+/**
+ * @param version sccache version
+ * @returns Path to sccache on success. Error on checksum verification failure. */
+async function downloadSCCache(version: string): Promise<Error | string> {
   const filename = getFilename(version);
-  const dirname = getDirname(version);
 
   const downloadUrl = `https://github.com/mozilla/sccache/releases/download/${version}/${filename}`;
   const sha256Url = `${downloadUrl}.sha256`;
@@ -63,8 +101,7 @@ async function setup() {
 
   // Compare the checksums.
   if (calculatedChecksum !== providedChecksum) {
-    core.setFailed('Checksum verification failed');
-    return;
+    return Error('Checksum verification failed');
   }
   core.info(`Correct checksum: ${calculatedChecksum}`);
 
@@ -75,27 +112,7 @@ async function setup() {
     sccachePath = await extractTar(sccachePackage);
   }
   core.info(`sccache extracted to: ${sccachePath}`);
-
-  // Cache sccache.
-  const sccacheHome = await cacheDir(
-    `${sccachePath}/${dirname}`,
-    'sccache',
-    version
-  );
-  core.info(`sccache cached to: ${sccacheHome}`);
-
-  // Add cached sccache into path.
-  core.addPath(`${sccacheHome}`);
-  // Expose the sccache path as env.
-  core.exportVariable('SCCACHE_PATH', `${sccacheHome}/sccache`);
-
-  // Expose the gha cache related variable to make it easier for users to
-  // integrate with gha support.
-  core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
-  core.exportVariable(
-    'ACTIONS_RUNTIME_TOKEN',
-    process.env.ACTIONS_RUNTIME_TOKEN || ''
-  );
+  return sccachePath;
 }
 
 function getFilename(version: string): Error | string {

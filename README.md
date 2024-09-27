@@ -86,6 +86,19 @@ With configure, call it with:
 ./configure CC="sccache clang" CXX="sccache clang"
 ```
 
+## Using on GitHub Enterprise Server (GHES)
+
+When using the action on GitHub Enterprise Server installations a valid GitHub.com token must be provided.
+
+```
+- name: Run sccache-cache
+  uses: mozilla-actions/sccache-action@v0.0.5
+  with:
+    token: ${{ secrets.MY_GITHUB_TOKEN }}
+```
+
+Note that using https://github.com/actions/create-github-app-token is a better option than storing a fixed token in the repo secrets.
+
 ## Prepare a new release
 
 1. Update the example in README.md

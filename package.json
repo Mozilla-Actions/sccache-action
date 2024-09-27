@@ -1,6 +1,6 @@
 {
   "name": "sccache-action",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Github Action for Sccache",
   "main": "dist/setup/index.js",
   "engines": {

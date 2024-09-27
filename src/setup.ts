@@ -31,7 +31,7 @@ async function setup() {
   if (version.length === 0) {
     // If no version is specified, the latest version is used by default.
     const token = core.getInput('token', {required: true});
-    const octokit = getOctokit(token);
+    const octokit = getOctokit(token, {baseUrl: 'https://api.github.com'});
     const release = await octokit.rest.repos.getLatestRelease({
       owner: 'mozilla',
       repo: 'sccache'

@@ -113,6 +113,7 @@ Note that using https://github.com/actions/create-github-app-token is a better o
 1. Update the example in README.md
 1. Update version in `package.json`
 1. Run `npm i --package-lock-only`
+1. Run `npm run build`
 1. Commit and push the local changes
 1. Tag a new release (vX.X.X)
 1. Create a new release in github

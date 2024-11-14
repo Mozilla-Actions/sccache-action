@@ -129,6 +129,8 @@ function getArch(): Error | string {
       return 'x86_64';
     case 'arm64':
       return 'aarch64';
+    case 'arm':
+      return 'armv7';
     default:
       return Error(`Unsupported arch "${process.arch}"`);
   }
@@ -141,7 +143,11 @@ function getPlatform(): Error | string {
     case 'win32':
       return 'pc-windows-msvc';
     case 'linux':
-      return 'unknown-linux-musl';
+      if (process.arch == 'arm') {
+        return 'unknown-linux-musleabi';
+      } else {
+        return 'unknown-linux-musl';
+      }
     default:
       return Error(`Unsupported platform "${process.platform}"`);
   }

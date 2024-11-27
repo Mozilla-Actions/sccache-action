@@ -56,7 +56,7 @@ Note that using the previous declaration will automatically create a
 
 ```
 - name: Run sccache-cache
-  uses: mozilla-actions/sccache-action@v0.0.6
+  uses: mozilla-actions/sccache-action
   with:
     disable_annotations: true
 ```

@@ -8,6 +8,9 @@ inputs:
   token:
     description: "Used to pull the latest release from sccache. When running this action outside of github.com, you have to pass a personal access token for github.com."
     default: ${{ github.server_url == 'https://github.com' && github.token || '' }}
+  disable_annotations:
+    description: "Disable annotation generation in post-run."
+    default: 'false'
 runs:
   using: "node20"
   main: "dist/setup/index.js"

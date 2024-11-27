@@ -71,3 +71,28 @@ jobs:
       - name: Run sccache for check
         shell: bash
         run: ${SCCACHE_PATH} --start-server
+
+  test_disable_annotations:
+    name: Test disable_annotations version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: npm
+
+      - name: npm install
+        run: npm install
+
+      - name: Run sccache-cache
+        uses: ./
+        with:
+          disable_annotations: true
+
+      - name: Run sccache for check
+        shell: bash
+        run: ${SCCACHE_PATH} --start-server

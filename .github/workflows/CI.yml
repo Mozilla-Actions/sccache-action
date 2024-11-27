@@ -73,7 +73,7 @@ jobs:
         run: ${SCCACHE_PATH} --start-server
 
   test_disable_annotations:
-    name: Test version
+    name: Test disable_annotations version
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:

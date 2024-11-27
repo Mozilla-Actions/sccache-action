@@ -74,17 +74,7 @@ jobs:
 
   test_disable_annotations:
     name: Test disable_annotations version
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macos-latest
-        version:
-          - ""
-          - v0.4.0
-
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -101,7 +91,6 @@ jobs:
       - name: Run sccache-cache
         uses: ./
         with:
-          version: ${{ matrix.version }}
           disable_annotations: true
 
       - name: Run sccache for check

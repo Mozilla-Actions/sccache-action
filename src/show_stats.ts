@@ -29,6 +29,12 @@ async function get_output(command: string, args: string[]): Promise<string> {
 }
 
 async function show_stats() {
+  const disable_annotations = core.getBooleanInput('disable_annotations');
+  if (disable_annotations) {
+    core.debug('annotations generation disabled');
+    return;
+  }
+
   core.debug('start sccache show starts');
   const human_stats = await core.group('Get human-readable stats', async () => {
     return get_output(`${process.env.SCCACHE_PATH}`, ['--show-stats']);

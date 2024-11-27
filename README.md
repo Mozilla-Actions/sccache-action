@@ -52,6 +52,15 @@ Note that using the previous declaration will automatically create a
   run: ${SCCACHE_PATH} --show-stats
 ```
 
+### disable stats report
+
+```
+- name: Run sccache-cache
+  uses: mozilla-actions/sccache-action@v0.0.6
+  with:
+    disable_annotations: true
+```
+
 ### Rust code
 
 For Rust code, the following environment variables should be set:

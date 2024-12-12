@@ -16,7 +16,7 @@ Just copy and paste the following in your GitHub action:
 
 ```
 - name: Run sccache-cache
-  uses: mozilla-actions/sccache-action@v0.0.6
+  uses: mozilla-actions/sccache-action@v0.0.7
 ```
 
 ### Conditionally run cache and enable it
@@ -24,7 +24,7 @@ Just copy and paste the following in your GitHub action:
 ```
 - name: Run sccache-cache only on non-release runs
   if: github.event_name != 'release' && github.event_name != 'workflow_dispatch'
-  uses: mozilla-actions/sccache-action@v0.0.6
+  uses: mozilla-actions/sccache-action@v0.0.7
 - name: Set Rust caching env vars only on non-release runs
   if: github.event_name != 'release' && github.event_name != 'workflow_dispatch'
   run: |
@@ -36,7 +36,7 @@ Just copy and paste the following in your GitHub action:
 
 ```
 - name: Run sccache-cache
-  uses: mozilla-actions/sccache-action@v0.0.6
+  uses: mozilla-actions/sccache-action@v0.0.7
   with:
     version: "v0.7.4"
 ```
@@ -101,7 +101,7 @@ When using the action on GitHub Enterprise Server installations a valid GitHub.c
 
 ```
 - name: Run sccache-cache
-  uses: mozilla-actions/sccache-action@v0.0.6
+  uses: mozilla-actions/sccache-action@v0.0.7
   with:
     token: ${{ secrets.MY_GITHUB_TOKEN }}
 ```
@@ -113,6 +113,7 @@ Note that using https://github.com/actions/create-github-app-token is a better o
 1. Update the example in README.md
 1. Update version in `package.json`
 1. Run `npm i --package-lock-only`
+1. Run `npm run build`
 1. Commit and push the local changes
 1. Tag a new release (vX.X.X)
 1. Create a new release in github

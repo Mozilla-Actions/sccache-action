@@ -34,7 +34,7 @@ Just copy and paste the following in your GitHub action:
 
 ### Specify a given version of sccache
 
-Versions prior v0.10.0 probably will not work.
+Versions prior to sccache v0.10.0 probably will not work.
 
 ```
 - name: Run sccache-cache

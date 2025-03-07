@@ -68,7 +68,10 @@ async function setup() {
 
   // Expose the gha cache related variable to make it easier for users to
   // integrate with gha support.
-  core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+  core.exportVariable(
+    'ACTIONS_RESULTS_URL',
+    process.env.ACTIONS_RESULTS_URL || ''
+  );
   core.exportVariable(
     'ACTIONS_RUNTIME_TOKEN',
     process.env.ACTIONS_RUNTIME_TOKEN || ''

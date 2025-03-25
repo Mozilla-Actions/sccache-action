@@ -1,6 +1,6 @@
 {
   "name": "sccache-action",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Github Action for Sccache",
   "main": "dist/setup/index.js",
   "engines": {
@@ -45,7 +45,7 @@
     "eslint-plugin-prettier": "^5.2.3",
     "jest": "^29.7.0",
     "jest-circus": "^29.7.0",
-    "prettier": "^3.4.2",
+    "prettier": "^3.5.3",
     "ts-jest": "^29.2.6",
     "typescript": "^5.7.2"
   }

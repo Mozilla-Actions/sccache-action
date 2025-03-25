@@ -66,6 +66,9 @@ async function setup() {
   // Expose the sccache path as env.
   core.exportVariable('SCCACHE_PATH', `${sccacheHome}/sccache`);
 
+  // Force the github action v2
+  core.exportVariable('ACTIONS_CACHE_SERVICE_V2', `on`);
+
   // Expose the gha cache related variable to make it easier for users to
   // integrate with gha support.
   core.exportVariable(

@@ -160,12 +160,7 @@ function getPlatform(): Error | string {
 }
 
 function getExtension(): string {
-  switch (process.platform) {
-    case 'win32':
-      return 'zip';
-    default:
-      return 'tar.gz';
-  }
+  return 'tar.gz';
 }
 
 setup().catch(err => {

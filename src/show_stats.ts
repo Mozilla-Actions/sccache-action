@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import * as core from '@actions/core';
+import {context} from '@actions/github';
 import * as exec from '@actions/exec';
 import {SummaryTableRow} from '@actions/core/lib/summary';
 
@@ -50,8 +51,9 @@ async function show_stats() {
   const formatted_stats = format_json_stats(stats);
 
   core.notice(formatted_stats.notice, {
-    title: 'sccache stats'
+    title: `sccache stats - ${context.job}`
   });
+
   core.info('\nFull human-readable stats:');
   core.info(human_stats);
 

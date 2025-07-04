@@ -133,7 +133,10 @@ function format_json_stats(stats: Stats): {
     stats.stats.compiler_write_duration
   );
 
-  const notice = `${ratio}% - ${cache_hit_count} hits, ${cache_miss_count} misses, ${cache_error_count} errors`;
+  const notice_hit = plural(cache_hit_count, 'hit');
+  const notice_miss = plural(cache_miss_count, 'miss', 'misses');
+  const notice_error = plural(cache_error_count, 'error');
+  const notice = `${ratio}% - ${notice_hit}, ${notice_miss}, ${notice_error}`;
 
   const table = [
     [{data: 'Cache hit %', header: true}, {data: `${ratio}%`}],
@@ -168,4 +171,8 @@ function format_json_stats(stats: Stats): {
 
 function percentage(x: number, y: number): number {
   return Math.round((x / y) * 100 || 0);
+}
+
+function plural(count: number, base: string, plural = base + 's'): string {
+  return `${count} ${count === 1 ? base : plural}`;
 }

@@ -56,15 +56,15 @@ jobs:
         id: get_version
         run: |
           git fetch --tags
-          latest_tag=$(git describe --tags --abbrev=0 || echo "0.0.0")
+          latest_tag=$(git describe --tags --abbrev=0 || echo "v0.0.0")
           echo "Latest tag: $latest_tag"
 
           if [ "${{ github.event.inputs.bump_version }}" = "true" ]; then
             IFS='.' read -r major minor patch <<< "${latest_tag#v}"
             patch=$((patch+1))
-            next_version="$major.$minor.$patch"
+            next_version="v$major.$minor.$patch"
           else
-            next_version="${latest_tag#v}"
+            next_version="$latest_tag"
           fi
 
           echo "version=$next_version" >> $GITHUB_OUTPUT
@@ -87,14 +87,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add dist README.md package.json
-          git commit -m "[CI] Update dist build and update files for version ${{ steps.get_version.outputs.version }}" || echo "No changes to commit"
+          git commit -m "[CI] Update dist build and update files for ${{ steps.get_version.outputs.version }}" || echo "No changes to commit"
           git push origin HEAD
 
       # Create Git tag if bump_version is true
       - name: Create Git Tag
         if: ${{ github.event.inputs.bump_version == 'true' }}
         run: |
-          git tag -a ${{ steps.get_version.outputs.version }} -m "Release ${{ steps.get_version.outputs.version }}"
+          git tag ${{ steps.get_version.outputs.version }}
           git push origin ${{ steps.get_version.outputs.version }}
 
       # Publish GitHub Release
@@ -103,7 +103,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.get_version.outputs.version }}
-          name: Release ${{ steps.get_version.outputs.version }}
+          name: ${{ steps.get_version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

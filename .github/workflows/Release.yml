@@ -1,0 +1,115 @@
+# Copyright 2023 Mozilla Foundation
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+name: Release Action CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_version:
+        description: "Bump up to the next version and create a tag"
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      # Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Build setup.ts and show_stats.ts
+      - name: Build TypeScript files
+        run: |
+          npx @vercel/ncc build src/setup.ts -o dist/setup --minify
+          npx @vercel/ncc build src/show_stats.ts -o dist/show_stats --minify
+
+      # Determine version
+      - name: Determine next version
+        id: get_version
+        run: |
+          git fetch --tags
+          latest_tag=$(git describe --tags --abbrev=0 || echo "v0.0.0")
+          echo "Latest tag: $latest_tag"
+
+          if [ "${{ github.event.inputs.bump_version }}" = "true" ]; then
+            IFS='.' read -r major minor patch <<< "${latest_tag#v}"
+            patch=$((patch+1))
+            next_version="v$major.$minor.$patch"
+          else
+            next_version="$latest_tag"
+          fi
+
+          echo "version=$next_version" >> $GITHUB_OUTPUT
+          echo "Next version: $next_version"
+
+          # Update README.md dynamically
+          sed -i "s|^\s*uses:.*|  uses: $GITHUB_REPOSITORY@$next_version|" README.md
+
+          # Update package.json dynamically
+          jq ".name = \"$(basename $GITHUB_REPOSITORY)\" |
+            .repository.url = \"git+https://github.com/$GITHUB_REPOSITORY.git\" |
+            .bugs.url = \"https://github.com/$GITHUB_REPOSITORY/issues\" |
+            .homepage = \"https://github.com/$GITHUB_REPOSITORY#readme\" |
+            .version = \"$next_version\"" package.json > package.tmp.json
+          mv package.tmp.json package.json
+
+      # Commit everything in a single commit
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dist README.md package.json
+          git commit -m "[CI] Update dist build and update files for ${{ steps.get_version.outputs.version }}" || echo "No changes to commit"
+          git push origin HEAD
+
+      # Create Git tag if bump_version is true
+      - name: Create Git Tag
+        if: ${{ github.event.inputs.bump_version == 'true' }}
+        run: |
+          git tag ${{ steps.get_version.outputs.version }}
+          git push origin ${{ steps.get_version.outputs.version }}
+
+      # Publish GitHub Release
+      - name: Publish Release
+        if: ${{ github.event.inputs.bump_version == 'true' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.get_version.outputs.version }}
+          name: ${{ steps.get_version.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Upload artifacts
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist

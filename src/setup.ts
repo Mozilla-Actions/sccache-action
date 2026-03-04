@@ -29,14 +29,15 @@ import * as crypto from 'crypto';
 async function setup() {
   let version = core.getInput('version');
   if (version.length === 0) {
-    // If no version is specified, the latest version is used by default.
+    // If no version is specified, find the latest version with a binary for this OS/arch.
     const token = core.getInput('token', {required: true});
     const octokit = getOctokit(token, {baseUrl: 'https://api.github.com'});
-    const release = await octokit.rest.repos.getLatestRelease({
-      owner: 'mozilla',
-      repo: 'sccache'
-    });
-    version = release.data.tag_name;
+    const foundVersion = await findLatestVersionForPlatform(octokit);
+    if (foundVersion instanceof Error) {
+      core.setFailed(foundVersion.message);
+      return;
+    }
+    version = foundVersion;
   }
   core.info(`try to setup sccache version: ${version}`);
 
@@ -80,6 +81,65 @@ async function setup() {
     process.env.ACTIONS_RUNTIME_TOKEN || ''
   );
 }
+
+/**
+ * Find the latest sccache release that has a binary for the current OS/arch.
+ * @param octokit GitHub API client
+ * @returns Version string on success, Error if no compatible release found.
+ */
+async function findLatestVersionForPlatform(
+  octokit: ReturnType<typeof getOctokit>
+): Promise<Error | string> {
+  const arch = getArch();
+  const platform = getPlatform();
+  if (arch instanceof Error) {
+    return arch;
+  }
+  if (platform instanceof Error) {
+    return platform;
+  }
+  const extension = getExtension();
+  const assetPattern = `sccache-v`; // All release assets start with this
+  const targetSuffix = `-${arch}-${platform}.${extension}`;
+
+  // Fetch releases (paginated, up to 100 at a time)
+  const releases = await octokit.rest.repos.listReleases({
+    owner: 'mozilla',
+    repo: 'sccache',
+    per_page: 100
+  });
+
+  for (const release of releases.data) {
+    // Skip draft and prerelease versions
+    if (release.draft || release.prerelease) {
+      continue;
+    }
+
+    const version = release.tag_name;
+    const expectedAssetName = `sccache-${version}-${arch}-${platform}.${extension}`;
+
+    // Check if this release has an asset for our platform
+    const hasMatchingAsset = release.assets.some(
+      asset => asset.name === expectedAssetName
+    );
+
+    if (hasMatchingAsset) {
+      core.info(
+        `Found compatible sccache release: ${version} with asset ${expectedAssetName}`
+      );
+      return version;
+    } else {
+      core.info(
+        `Release ${version} does not have asset for ${arch}-${platform}, checking older releases...`
+      );
+    }
+  }
+
+  return Error(
+    `No sccache release found with a binary for ${arch}-${platform}`
+  );
+}
+
 /**
  * @param version sccache version
  * @returns Path to sccache on success. Error on checksum verification failure. */

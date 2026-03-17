@@ -14,14 +14,14 @@ Just copy and paste the following in your GitHub action:
 
 ### Use the latest version of sccache if no version is specified
 
-```
+```yml
 - name: Run sccache-cache
   uses: mozilla-actions/sccache-action@v0.0.9
 ```
 
 ### Conditionally run cache and enable it
 
-```
+```yml
 - name: Run sccache-cache only on non-release runs
   if: github.event_name != 'release' && github.event_name != 'workflow_dispatch'
   uses: mozilla-actions/sccache-action@v0.0.9
@@ -36,7 +36,7 @@ Just copy and paste the following in your GitHub action:
 
 Versions prior to sccache v0.10.0 probably will not work.
 
-```
+```yml
 - name: Run sccache-cache
   uses: mozilla-actions/sccache-action@v0.0.9
   with:
@@ -48,7 +48,7 @@ Versions prior to sccache v0.10.0 probably will not work.
 Note that using the previous declaration will automatically create a
 `Post Run sccache-cache` task.
 
-```
+```yml
 - name: Run sccache stat for check
   shell: bash
   run: ${SCCACHE_PATH} --show-stats
@@ -56,7 +56,7 @@ Note that using the previous declaration will automatically create a
 
 ### disable stats report
 
-```
+```yml
 - name: Run sccache-cache
   uses: mozilla-actions/sccache-action
   with:
@@ -67,7 +67,7 @@ Note that using the previous declaration will automatically create a
 
 For Rust code, the following environment variables should be set:
 
-```
+```yml
     env:
       SCCACHE_GHA_ENABLED: "true"
       RUSTC_WRAPPER: "sccache"
@@ -77,20 +77,20 @@ For Rust code, the following environment variables should be set:
 
 For C/C++ code, the following environment variables should be set:
 
-```
+```yml
     env:
       SCCACHE_GHA_ENABLED: "true"
 ```
 
 With cmake, add the following argument:
 
-```
+```yml
 -DCMAKE_C_COMPILER_LAUNCHER=sccache
 -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
 ```
 
 With configure, call it with:
-```
+```sh
 # With gcc
 ./configure CC="sccache gcc" CXX="sccache gcc"
 # With clang
@@ -101,7 +101,7 @@ With configure, call it with:
 
 When using the action on GitHub Enterprise Server installations a valid GitHub.com token must be provided.
 
-```
+```yml
 - name: Run sccache-cache
   uses: mozilla-actions/sccache-action@v0.0.9
   with:

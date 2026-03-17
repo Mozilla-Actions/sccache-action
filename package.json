@@ -1,10 +1,10 @@
 {
   "name": "sccache-action",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Github Action for Sccache",
   "main": "dist/setup/index.js",
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "scripts": {
     "build-dist": "ncc build lib/setup.js -m -o dist/setup/ && ncc build lib/show_stats.js -m -o dist/show_stats",

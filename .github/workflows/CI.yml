@@ -37,6 +37,30 @@ jobs:
       - name: Build & Test
         run: npm run test
 
+  verify-dist:
+    name: Verify dist/ is up to date
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+          cache: npm
+
+      - name: npm ci
+        run: npm ci
+      - name: Rebuild dist/
+        run: npm run build
+      - name: Check dist/ matches committed output
+        run: |
+          if ! git diff --exit-code -- dist/; then
+            echo "::error::Committed dist/ does not match a clean rebuild from source."
+            echo "::error::Run 'npm ci && npm run build' locally and commit the updated dist/ before releasing."
+            exit 1
+          fi
+
   test:
     name: Test version
     runs-on: ${{ matrix.os }}
